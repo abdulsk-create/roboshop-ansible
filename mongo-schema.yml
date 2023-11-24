@@ -16,5 +16,5 @@
     state: installed
 
 - name: load schema
-  ansible.builtin.shell: mongo --host mongodb.entertanova.com </app/schema/{{component}}.js
+  ansible.builtin.shell: mongo --host mongodb-dev.entertanova.com </app/schema/{{component}}.js
 
