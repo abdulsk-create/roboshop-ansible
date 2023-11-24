@@ -1,0 +1,22 @@
+- name: systemd setup service file
+  ansible.builtin.copy:
+    src: catalogue.service
+    dest: /etc/systemd/system/{{component}}.service
+
+- name: start {{component}} service
+  ansible.builtin.systemd:
+    name: {{component}}
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+
+
+#echo -e "\e[36m>>>>>>>>>>>>>>>>>>>>>>>> create ${component} service <<<<<<<<<<<<<<<<<<<<<<<<<<\e[0m"
+#cp ${component}.service /etc/systemd/system/${component}.service &>>${log}
+#func_exit_status
+
+#echo -e "\e[36m>>>>>>>>>>>>>>>>>>>>>>>> start ${component} service <<<<<<<<<<<<<<<<<<<<<<<<<<\e[0m"
+#systemctl daemon-reload &>>${log}
+#systemctl enable ${component} &>>${log}
+#systemctl restart ${component} &>>${log}
+#func_exit_status
