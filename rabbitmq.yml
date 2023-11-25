@@ -32,10 +32,11 @@
 
     - name: add app user
       community.rabbitmq.rabbitmq_user:
-        name: roboshop
+        user: roboshop
         password: roboshop123
         vhost: /
         configure_priv: .*
         read_priv: .*
-        write_pric: .*
+        write_priv: .*
         state: present
+
