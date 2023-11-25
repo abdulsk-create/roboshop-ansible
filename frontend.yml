@@ -2,7 +2,7 @@
   hosts: all
   become: true
   tasks:
-    - name: install nginx
+    - name: install nginx service
       ansible.builtin.yum:
         name: nginx
         state: installed
@@ -12,28 +12,27 @@
         src: nginx.conf
         dest: /etc/nginx/default.d/roboshop.conf
 
-    - name: cleanup old content
+    - name: Recursively remove directory
       ansible.builtin.file:
         path: /usr/share/nginx/html
         state: absent
 
-    - name: create application directory
+    - name: create app directory
       ansible.builtin.file:
         path: /usr/share/nginx/html
         state: directory
 
-    - name: download and extract application content
+    - name: download and extract app content
       ansible.builtin.unarchive:
         src: https://roboshop-artifacts.s3.amazonaws.com/frontend.zip
         dest: /usr/share/nginx/html
         remote_src: yes
 
-    - name: restart nginx
+    - name: start nginx service
       ansible.builtin.systemd:
         name: nginx
         state: restarted
         enabled: yes
-
 
 
 #  source common.sh
