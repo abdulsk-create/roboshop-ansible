@@ -1,0 +1,41 @@
+#curl -s https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | bash
+#curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | bash
+#
+#yum install rabbitmq-server -y
+#
+#systemctl enable rabbitmq-server
+#systemctl start rabbitmq-server
+#
+#rabbitmqctl add_user roboshop ${rabbitmq_app_password}
+#rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
+
+- name: rabbitmq setup
+  hosts: all
+  become: true
+  tasks:
+    - name: install erlang repos
+      ansible.builtin.shell: curl -s https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | bash
+
+    - name: install rabbitmq repos
+      ansible.builtin.shell: curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | bash
+
+    - name: install rabbitmq server
+      ansible.builtin.yum:
+        name: rabbitmq-server
+        state: installed
+
+    - name: start rabbitmq
+      ansible.builtin.systemd:
+        name: rabbitmq
+        state: restarted
+        enabled: yes
+
+    - name: add app user
+      community.rabbitmq.rabbitmq_user:
+        name: roboshop
+        password: roboshop123
+        vhost: /
+        configure_priv: .*
+        read_priv: .*
+        write_pric: .*
+        state: present
