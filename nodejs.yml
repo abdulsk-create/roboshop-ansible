@@ -1,0 +1,44 @@
+#echo -e "\e[36m>>>>>>>>>>>>>>>>>>>>>>>> create mongodb repo <<<<<<<<<<<<<<<<<<<<<<<<<<\e[0m"
+#cp mongo.repo /etc/yum.repos.d/mongo.repo &>>${log}
+#func_exit_status
+#
+#echo -e "\e[36m>>>>>>>>>>>>>>>>>>>>>>>> install nodejs repos <<<<<<<<<<<<<<<<<<<<<<<<<<\e[0m"
+#curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>${log}
+#func_exit_status
+#
+#echo -e "\e[36m>>>>>>>>>>>>>>>>>>>>>>>> install nodejs <<<<<<<<<<<<<<<<<<<<<<<<<<\e[0m"
+#yum install nodejs -y &>>${log}
+#func_exit_status
+#
+#func_apppreq
+#echo -e "\e[36m>>>>>>>>>>>>>>>>>>>>>>>> download nodejs dependencies <<<<<<<<<<<<<<<<<<<<<<<<<<\e[0m"
+#npm install &>>${log}
+#func_exit_status
+#
+#func_schema_setup
+#
+#func_systemd
+
+
+
+- name: install nodejs repos
+  ansible.builtin.shell: curl -sL https://rpm.nodesource.com/setup_lts.x | bash
+
+- name: install nodejs
+  ansible.builtin.yum:
+    name: nodejs
+    state: installed
+
+- name: app pre-requisites
+  ansible.builtin.import_tasks: app-preq.yml
+
+- name: download nodejs dependencies
+  ansible.builtin.shell: npm install
+  args:
+    chdir: /app
+
+- name: schema setup
+  ansible.builtin.import_tasks: app-preq.yml
+
+
+
