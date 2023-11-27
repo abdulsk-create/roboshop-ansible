@@ -1,0 +1,2 @@
+- name: python setup
+  ansible.builtin.import_tasks: python.yml

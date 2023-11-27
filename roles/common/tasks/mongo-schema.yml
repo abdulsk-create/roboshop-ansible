@@ -1,0 +1,19 @@
+#echo -e "\e[36m>>>>>>>>>>>>>>>>>>>>>>>> install mongo client <<<<<<<<<<<<<<<<<<<<<<<<<<\e[0m"
+#yum install mongodb-org-shell -y &>>${log}
+#func_exit_status
+#
+#echo -e "\e[36m>>>>>>>>>>>>>>>>>>>>>>>> load user schema <<<<<<<<<<<<<<<<<<<<<<<<<<\e[0m"
+#mongo --host mongodb.entertanova.com </app/schema/${component}.js &>>${log}
+
+- name: copy mongodb repo file
+  ansible.builtin.copy:
+    src: mongo.repo
+    dest: /etc/yum.repos.d/mongo.repo
+
+- name: install mongo client
+  ansible.builtin.yum:
+    name: mongodb-org-shell
+    state: installed
+
+- name: load user schema
+  ansible.builtin.shell: mongo --host mongodb-dev.entertanova.com </app/schema/{{component}}.js
